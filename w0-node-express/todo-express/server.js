@@ -45,7 +45,7 @@ const todos = [
   },
 ];
 
-console.log(todos);
+// console.log(todos);
 
 // middleware/api
 app.use(express.json());
@@ -54,7 +54,7 @@ app.use(morgan("dev"));
 
 // routes
 app.get("/app", (req, res, next) => {
-  res.status(200).send("Todo-Express");
+  res.status(200).send(JSON.stringify(todos, null, 2));
 });
 
 // EP - POST(create) new todo to array
