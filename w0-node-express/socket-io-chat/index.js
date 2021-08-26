@@ -31,9 +31,9 @@ app.get("/", (req, res) => {
 // server startup
 io.on("connection", (socket) => {
   socket.on("chat message", (msg) => {
-    console.log(`message: ${msg}`);
+    io.emit("chat message", msg); // sends the message event to all connected sockets
   });
-}); // listens on the 'connection' event for incoming sockets
+}); // listens on the 'connection' event for incoming sockets, once socket is established, listens for new chat messages
 
 server.listen(PORT, () => {
   console.log(`Socket.io Chat listening on http://localhost:${PORT}`);
