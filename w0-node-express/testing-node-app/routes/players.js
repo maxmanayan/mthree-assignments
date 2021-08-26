@@ -57,7 +57,7 @@ router.post("/players/player", (req, res, next) => {
   const newPlayer = req.body;
   newPlayer._id = uuidv4();
   nbaPlayers.push(newPlayer);
-  res.status(200).send(newPlayer);
+  res.status(201).send(newPlayer);
 });
 
 // Read - GET ALL
@@ -75,7 +75,7 @@ router.get("/players/player/:testId", (req, res, next) => {
       res.status(200).send(p);
     }
   });
-  if (res.status(400)) res.send("Player Not Available");
+  if (error) next(new Error("Player Not Available"));
 });
 
 // Read - GET query filter
@@ -95,7 +95,12 @@ router.get("/players/player", (req, res, next) => {
     }
   });
 
-  res.status(200).send(playerResArr);
+  if (playerResArr.length !== 0 && res.status(200)) res.send(playerResArr);
+  if (res.status(400)) {
+    let err = new Error("Player Not Available");
+    err.status = res.status;
+    next(err);
+  }
 });
 
 // Update - PUT
@@ -108,6 +113,11 @@ router.put("/players/player/:testId", (req, res, next) => {
       res.status(200).send(p);
     }
   });
+  if (res.status(400)) {
+    let err = new Error("Player Not Available");
+    err.status = 400;
+    next(err);
+  }
 });
 
 // Delete - DELETE
@@ -118,6 +128,11 @@ router.delete("/players/player/:testId", (req, res, next) => {
       res.status(200).send(p);
     }
   });
+  if (res.status(400)) {
+    let err = new Error("Player Not Available");
+    err.status = 400;
+    next(err);
+  }
 });
 
 module.exports = router;

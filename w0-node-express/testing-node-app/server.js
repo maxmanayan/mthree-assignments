@@ -4,6 +4,8 @@
 // Date: August 26, 2021
 
 // links
+// Default error handler docs - [ https://expressjs.com/en/guide/error-handling.html ]
+// Default error handler YT tutorial - [ https://www.youtube.com/watch?v=deZP3Z33DJ4 ]
 
 // imports
 const express = require("express");
