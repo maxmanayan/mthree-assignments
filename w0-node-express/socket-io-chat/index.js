@@ -19,7 +19,7 @@ const PORT = 3000;
 
 // routes
 app.get("/", (req, res) => {
-  res.send("<h1>Socket.io Chat App</h1>");
+  res.sendFile(__dirname + "/index.html");
 });
 
 // error handlers
