@@ -54,17 +54,19 @@ const nbaPlayers = [
 // routes
 // Create - POST
 router.post("/players/player", (req, res, next) => {
-  const newPlayerJSON = req.body;
-  newPlayerJSON._id = uuidv4();
-  nbaPlayers.push(newPlayerJSON);
-  res.status(200).send(nbaPlayers);
-  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+  const newPlayer = req.body;
+  newPlayer._id = uuidv4();
+  nbaPlayers.push(newPlayer);
+  res.status(200).send(newPlayer);
 });
 
 // Read - GET ALL
 router.get("/players", (req, res, next) => {
-  res.status(200).send(nbaPlayers);
-  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+  try {
+    res.status(200).send(nbaPlayers);
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Read - GET ONE
@@ -73,7 +75,6 @@ router.get("/players/player/:testId", (req, res, next) => {
   nbaPlayers.forEach((p) => {
     if (p.testId === playerId) {
       res.status(200).send(p);
-      // res.status(200).send(JSON.stringify(p, null, 2));
     }
   });
 });
@@ -96,7 +97,6 @@ router.get("/players/player", (req, res, next) => {
   });
 
   res.status(200).send(playerResArr);
-  // res.status(200).send(JSON.stringify(playerResArr, null, 2));
 });
 
 // Update - PUT
@@ -106,11 +106,9 @@ router.put("/players/player/:testId", (req, res, next) => {
       p.name = req.body.name;
       p.team = req.body.team;
       p.jerseyNum = req.body.jerseyNum;
+      res.status(200).send(p);
     }
   });
-
-  res.status(200).send(nbaPlayers);
-  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 // Delete - DELETE
@@ -118,10 +116,9 @@ router.delete("/players/player/:testId", (req, res, next) => {
   nbaPlayers.map((p, i) => {
     if (p.testId === Number(req.params.testId)) {
       nbaPlayers.splice(i, 1);
+      res.status(200).send(p);
     }
   });
-  res.status(200).send(nbaPlayers);
-  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 module.exports = router;
