@@ -54,6 +54,7 @@ const nbaPlayers = [
 
 // APIs and middleware
 app.use(morgan("dev"));
+app.use(express.json());
 
 // routes
 app.get("/", (req, res) => {
@@ -61,6 +62,11 @@ app.get("/", (req, res) => {
 });
 
 // Create - POST
+app.post("/players/player", (req, res, next) => {
+  console.log(req.body);
+
+  res.status(200).send("Player added");
+});
 
 // Read - GET ALL
 app.get("/players", (req, res, next) => {
