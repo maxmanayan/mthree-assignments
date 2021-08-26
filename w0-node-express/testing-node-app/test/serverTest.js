@@ -6,15 +6,22 @@
 // links
 // Mocha (test runner) docs = [ https://mochajs.org/#getting-started ]
 // Chai (assertion library) docs = [ https://www.chaijs.com/ ]
+// Chai HTTP docs - [ https://www.chaijs.com/plugins/chai-http/ ]
 // Setup Testing YT Tutorial - [ https://www.youtube.com/watch?v=MLTRHc5dk6s ]
 // Testing REST Api Blog - [ https://dev.to/mhmdlotfy96/testing-a-rest-api-in-node-js-with-express-using-mocha-and-chai-1258 ]
+
+// SO links
+// app.address error - [ https://stackoverflow.com/questions/33986863/mocha-api-testing-getting-typeerror-app-address-is-not-a-function ]
 
 // By default, Mocha will look for a folder called 'test'
 // imports
 const chai = require("chai");
+const chaiHttp = require("chai-http");
 const server = require("../server");
 const { v4: uuidv4 } = require("uuid");
+const { expect } = require("chai");
 
+// constants
 const nbaPlayers = [
   {
     _id: uuidv4(),
@@ -53,6 +60,10 @@ const nbaPlayers = [
   },
 ];
 
+// middleware
+chai.should(); // sets up all test as default should assertions
+chai.use(chaiHttp);
+
 // REST API tests
 describe("REST APIs", () => {
   describe("GET endpoints", () => {
@@ -62,6 +73,8 @@ describe("REST APIs", () => {
         .get("/players")
         .end((err, res) => {
           res.should.have.status(200);
+          res.body.should.be.a("array");
+          // res.body.should.equal(nbaPlayers); // would work by uuid changes
           done();
         });
     });

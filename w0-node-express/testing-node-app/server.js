@@ -72,7 +72,8 @@ app.post("/players/player", (req, res, next) => {
 
 // Read - GET ALL
 app.get("/players", (req, res, next) => {
-  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+  res.status(200).send(nbaPlayers);
+  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 // Read - GET ONE
@@ -131,13 +132,6 @@ app.delete("/players/player/:testId", (req, res, next) => {
 // error handles
 
 // server start up
-app.listen(PORT, () => {
+module.exports = app.listen(PORT, () => {
   console.log(`Testing Node.js App listening at http://localhost:${PORT}`);
 });
-
-// exports
-module.exports = {
-  sayHello() {
-    return "Hello";
-  },
-};
