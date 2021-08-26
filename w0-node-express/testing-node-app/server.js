@@ -134,3 +134,10 @@ app.delete("/players/player/:testId", (req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Testing Node.js App listening at http://localhost:${PORT}`);
 });
+
+// exports
+module.exports = {
+  sayHello() {
+    return "Hello";
+  },
+};
