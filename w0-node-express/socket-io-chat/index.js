@@ -30,7 +30,9 @@ app.get("/", (req, res) => {
 
 // server startup
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  socket.on("chat message", (msg) => {
+    console.log(`message: ${msg}`);
+  });
 }); // listens on the 'connection' event for incoming sockets
 
 server.listen(PORT, () => {
