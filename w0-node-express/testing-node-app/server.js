@@ -54,6 +54,7 @@ const nbaPlayers = [
 
 // APIs and middleware
 app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // routes
@@ -63,9 +64,10 @@ app.get("/", (req, res) => {
 
 // Create - POST
 app.post("/players/player", (req, res, next) => {
-  console.log(req.body);
-
-  res.status(200).send("Player added");
+  const newPlayerJSON = req.body;
+  newPlayerJSON._id = uuidv4();
+  nbaPlayers.push(newPlayerJSON);
+  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 // Read - GET ALL
