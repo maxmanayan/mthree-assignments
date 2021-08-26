@@ -13,6 +13,44 @@ const morgan = require("morgan");
 // constants
 const PORT = 3000;
 
+const nbaPlayers = [
+  {
+    _id: "uuid",
+    testId: 1,
+    name: "Lebron James",
+    team: "Lakers",
+    jerseyNum: 6,
+  },
+  {
+    _id: "uuid",
+    testId: 2,
+    name: "Kevin Durant",
+    team: "Nets",
+    jerseyNum: 7,
+  },
+  {
+    _id: "uuid",
+    testId: 3,
+    name: "Giannis Antetokounmpo",
+    team: "Bucks",
+    jerseyNum: 34,
+  },
+  {
+    _id: "uuid",
+    testId: 4,
+    name: "Russell Westbrook",
+    team: "Lakers",
+    jerseyNum: 0,
+  },
+  {
+    _id: "uuid",
+    testId: 5,
+    name: "Damian Lillard",
+    team: "Trail Blazers",
+    jerseyNum: 0,
+  },
+];
+
 // APIs and middleware
 app.use(morgan("dev"));
 
