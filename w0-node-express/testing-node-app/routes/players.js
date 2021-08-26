@@ -3,6 +3,10 @@
 // Assignment: mthree, Testing Node.js Application
 // Date: August 26, 2021
 
+// links
+// Express docs - [ https://expressjs.com/en/api.html#router ]
+// Example Repo w/ Chai and Mocha - [ https://github.com/mohamedlotfe/unit-testing-api-nodejs/tree/master ]
+
 // imports
 const express = require("express");
 const router = express.Router();
