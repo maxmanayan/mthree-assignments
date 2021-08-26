@@ -20,7 +20,7 @@ const nbaPlayers = [
     testId: 1,
     name: "Lebron James",
     team: "Lakers",
-    jerseyNum: 6,
+    jerseyNum: 23,
   },
   {
     _id: uuidv4(),
@@ -106,6 +106,17 @@ app.get("/players/player", (req, res, next) => {
 });
 
 // Update - PUT
+app.put("/players/player/:testId", (req, res, next) => {
+  nbaPlayers.forEach((p) => {
+    if (p.testId === Number(req.params.testId)) {
+      p.name = req.body.name;
+      p.team = req.body.team;
+      p.jerseyNum = req.body.jerseyNum;
+    }
+  });
+
+  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+});
 
 // Delete - DELETE
 
