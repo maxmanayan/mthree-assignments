@@ -1,4 +1,4 @@
-// File: /test/serverTest.js
+// File: /test/players.js
 // Created by: Max Manayan
 // Assignment: mthree, Testing Node.js Application
 // Date: August 26, 2021
@@ -18,8 +18,8 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../server");
-const { v4: uuidv4 } = require("uuid");
 const { expect } = require("chai");
+const { v4: uuidv4 } = require("uuid");
 
 // constants
 const nbaPlayers = [
@@ -70,7 +70,7 @@ describe("REST APIs", () => {
     it("Should return whole array of player objects", (done) => {
       chai
         .request(server)
-        .get("/players")
+        .get("/api/players")
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("array");
@@ -86,7 +86,7 @@ describe("REST APIs", () => {
       const playerId = 1;
       chai
         .request(server)
-        .get(`/players/player/${playerId}`)
+        .get(`/api/players/player/${playerId}`)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("object");
@@ -108,7 +108,9 @@ describe("REST APIs", () => {
       const jerseyNum = 0;
       chai
         .request(server)
-        .get(`/players/player?name=${name}&team=${team}&jerseyNum=${jerseyNum}`)
+        .get(
+          `/api/players/player?name=${name}&team=${team}&jerseyNum=${jerseyNum}`
+        )
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("array");
