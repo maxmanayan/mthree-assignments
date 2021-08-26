@@ -52,15 +52,36 @@ const nbaPlayers = [
   },
 ];
 
-console.log(nbaPlayers);
-
 // APIs and middleware
 app.use(morgan("dev"));
 
 // routes
 app.get("/", (req, res) => {
-  res.status(200).send("Testing Node.js App");
+  res.status(200).send("<h1>Testing Node.js Application</h1>");
 });
+
+// Create - POST
+
+// Read - GET ALL
+app.get("/players", (req, res, next) => {
+  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+});
+
+// Read - GET ONE
+app.get("/players/player/:testId", (req, res, next) => {
+  let playerId = Number(req.params.testId);
+  nbaPlayers.forEach((p) => {
+    if (p.testId === playerId) {
+      res.status(200).send(JSON.stringify(p, null, 2));
+    }
+  });
+});
+
+// Read - GET query filter
+
+// Update - PUT
+
+// Delete - DELETE
 
 // error handles
 
