@@ -66,8 +66,8 @@ chai.use(chaiHttp);
 
 // REST API tests
 describe("REST APIs", () => {
-  describe("GET endpoints", () => {
-    it("It should get whole sample data", (done) => {
+  describe("GET ALL endpoint", () => {
+    it("Should return whole array of player objects", (done) => {
       chai
         .request(server)
         .get("/players")
@@ -76,6 +76,43 @@ describe("REST APIs", () => {
           res.body.should.be.a("array");
           res.body.length.should.not.be.eq(0);
           // res.body.should.equal(nbaPlayers); // would work by uuid changes
+          done();
+        });
+    });
+  });
+
+  describe("GET ONE endpoint", () => {
+    it("It should get one player object by id", (done) => {
+      const playerId = 1;
+      chai
+        .request(server)
+        .get(`/players/player/${playerId}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have.property("_id");
+          res.body.should.have.property("testId");
+          res.body.should.have.property("name");
+          res.body.should.have.property("team");
+          res.body.should.have.property("jerseyNum");
+          res.body.should.have.property("testId").eq(playerId);
+          done();
+        });
+    });
+  });
+
+  describe("GET query filter endpoint", () => {
+    it("Should return array of player objects that match queries", (done) => {
+      const name = "Kevin Durant";
+      const team = "Lakers";
+      const jerseyNum = 0;
+      chai
+        .request(server)
+        .get(`/players/player?name=${name}&team=${team}&jerseyNum=${jerseyNum}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("array");
+          res.body.length.should.not.be.eq(0);
           done();
         });
     });
