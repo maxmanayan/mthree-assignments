@@ -71,5 +71,11 @@
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
+
+    <!-- Loads the socket.io-client... exposes io global w/ endpoint, then connects -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io(); // will default to trying to connect to host that serves page
+    </script>
   </body>
 </html>
