@@ -74,6 +74,7 @@ describe("REST APIs", () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("array");
+          res.body.length.should.not.be.eq(0);
           // res.body.should.equal(nbaPlayers); // would work by uuid changes
           done();
         });
