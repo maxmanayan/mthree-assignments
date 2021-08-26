@@ -62,21 +62,20 @@ router.post("/players/player", (req, res, next) => {
 
 // Read - GET ALL
 router.get("/players", (req, res, next) => {
-  try {
-    res.status(200).send(nbaPlayers);
-  } catch (err) {
-    next(err);
-  }
+  res.status(200).send(nbaPlayers);
 });
 
 // Read - GET ONE
 router.get("/players/player/:testId", (req, res, next) => {
   let playerId = Number(req.params.testId);
+  let error = true;
   nbaPlayers.forEach((p) => {
     if (p.testId === playerId) {
+      error = false;
       res.status(200).send(p);
     }
   });
+  if (res.status(400)) res.send("Player Not Available");
 });
 
 // Read - GET query filter
