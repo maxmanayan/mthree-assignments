@@ -67,7 +67,8 @@ app.post("/players/player", (req, res, next) => {
   const newPlayerJSON = req.body;
   newPlayerJSON._id = uuidv4();
   nbaPlayers.push(newPlayerJSON);
-  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+  res.status(200).send(nbaPlayers);
+  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 // Read - GET ALL
@@ -81,7 +82,8 @@ app.get("/players/player/:testId", (req, res, next) => {
   let playerId = Number(req.params.testId);
   nbaPlayers.forEach((p) => {
     if (p.testId === playerId) {
-      res.status(200).send(JSON.stringify(p, null, 2));
+      res.status(200).send(p);
+      // res.status(200).send(JSON.stringify(p, null, 2));
     }
   });
 });
@@ -103,7 +105,8 @@ app.get("/players/player", (req, res, next) => {
     }
   });
 
-  res.status(200).send(JSON.stringify(playerResArr, null, 2));
+  res.status(200).send(playerResArr);
+  // res.status(200).send(JSON.stringify(playerResArr, null, 2));
 });
 
 // Update - PUT
@@ -116,7 +119,8 @@ app.put("/players/player/:testId", (req, res, next) => {
     }
   });
 
-  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+  res.status(200).send(nbaPlayers);
+  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 // Delete - DELETE
@@ -126,7 +130,8 @@ app.delete("/players/player/:testId", (req, res, next) => {
       nbaPlayers.splice(i, 1);
     }
   });
-  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+  res.status(200).send(nbaPlayers);
+  // res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
 });
 
 // error handles
