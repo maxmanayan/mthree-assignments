@@ -119,6 +119,14 @@ app.put("/players/player/:testId", (req, res, next) => {
 });
 
 // Delete - DELETE
+app.delete("/players/player/:testId", (req, res, next) => {
+  nbaPlayers.map((p, i) => {
+    if (p.testId === Number(req.params.testId)) {
+      nbaPlayers.splice(i, 1);
+    }
+  });
+  res.status(200).send(JSON.stringify(nbaPlayers, null, 2));
+});
 
 // error handles
 
