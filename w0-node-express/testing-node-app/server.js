@@ -78,6 +78,24 @@ app.get("/players/player/:testId", (req, res, next) => {
 });
 
 // Read - GET query filter
+app.get("/players/player", (req, res, next) => {
+  let queryJerseyNum = Number(req.query.jerseyNum);
+  let queryName = req.query.name;
+  let queryTeam = req.query.team;
+
+  const playerResArr = [];
+  nbaPlayers.forEach((p) => {
+    if (
+      p.jerseyNum === queryJerseyNum ||
+      p.name === queryName ||
+      p.team === queryTeam
+    ) {
+      playerResArr.push(p);
+    }
+  });
+
+  res.status(200).send(JSON.stringify(playerResArr, null, 2));
+});
 
 // Update - PUT
 
