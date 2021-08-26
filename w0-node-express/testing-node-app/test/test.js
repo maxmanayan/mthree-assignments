@@ -14,7 +14,4 @@ const mocha = require("mocha");
 const describe = mocha.describe;
 const it = mocha.it;
 
-// console.log(assert);
-// console.log(mocha);
-console.log(describe);
-console.log(it);
+assert.typeOf("foo", "string", "Does this work");
