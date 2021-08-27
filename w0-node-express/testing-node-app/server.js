@@ -14,7 +14,7 @@ const morgan = require("morgan");
 const playersRouter = require("./routes/players");
 
 // constants
-const PORT = 3000;
+const PORT = 3001;
 
 // APIs and middleware
 app.use(morgan("dev"));
