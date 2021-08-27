@@ -24,7 +24,7 @@ app.use("/api", playersRouter); // linking players express router APIs
 
 // routes
 app.get("/", (req, res) => {
-  res.status(200).send("<h1>Testing Node.js Application</h1>");
+  console.log("Node server connected");
 });
 
 // error handling
