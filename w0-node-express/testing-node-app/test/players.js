@@ -18,47 +18,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../server");
-const { expect } = require("chai");
 const { v4: uuidv4 } = require("uuid");
-
-// constants
-const nbaPlayers = [
-  {
-    _id: uuidv4(),
-    testId: 1,
-    name: "Lebron James",
-    team: "Lakers",
-    jerseyNum: 23,
-  },
-  {
-    _id: uuidv4(),
-    testId: 2,
-    name: "Kevin Durant",
-    team: "Nets",
-    jerseyNum: 7,
-  },
-  {
-    _id: uuidv4(),
-    testId: 3,
-    name: "Giannis Antetokounmpo",
-    team: "Bucks",
-    jerseyNum: 34,
-  },
-  {
-    _id: uuidv4(),
-    testId: 4,
-    name: "Russell Westbrook",
-    team: "Lakers",
-    jerseyNum: 0,
-  },
-  {
-    _id: uuidv4(),
-    testId: 5,
-    name: "Damian Lillard",
-    team: "Trail Blazers",
-    jerseyNum: 0,
-  },
-];
 
 // middleware
 chai.should(); // sets up all test as default should assertions
@@ -76,6 +36,16 @@ describe("REST APIs", () => {
           res.body.should.be.a("array");
           res.body.length.should.not.be.eq(0);
           // res.body.should.equal(nbaPlayers); // would work by uuid changes
+          done();
+        });
+    });
+
+    it("If the page is not found", (done) => {
+      chai
+        .request(server)
+        .get("/api/player")
+        .end((err, res) => {
+          res.should.have.status(404);
           done();
         });
     });
@@ -99,6 +69,27 @@ describe("REST APIs", () => {
           done();
         });
     });
+
+    it("If player object is not specified", (done) => {
+      chai
+        .request(server)
+        .get("/api/players/player/")
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
+
+    it("If player object is not in DB", (done) => {
+      const playerId = 1124132512351235;
+      chai
+        .request(server)
+        .get(`/api/players/player/${playerId}`)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
   });
 
   describe("GET query filter endpoint", () => {
@@ -117,6 +108,143 @@ describe("REST APIs", () => {
           res.body.length.should.not.be.eq(0);
           done();
         });
+    });
+
+    it("If player query is not specified", (done) => {
+      chai
+        .request(server)
+        .get("/api/players/player?")
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
+  });
+
+  describe("POST endpoint", () => {
+    it("Should return an object with all properties", (done) => {
+      const player = {
+        _id: uuidv4(),
+        testId: 1,
+        name: "Lebron James",
+        team: "Lakers",
+        jerseyNum: 23,
+      };
+      chai
+        .request(server)
+        .post("/api/players/player/")
+        .send(player)
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a("object");
+          res.body.should.have.property("_id");
+          res.body.should.have.property("testId").eq(1);
+          res.body.should.have.property("name").eq("Lebron James");
+          res.body.should.have.property("team").eq("Lakers");
+          res.body.should.have.property("jerseyNum").eq(23);
+          done();
+        });
+    });
+
+    // negative
+    // have no validation on api
+  });
+
+  describe("PUT endpoint", () => {
+    it("Should return an object with all properties", (done) => {
+      const playerId = 1;
+      const updatedPlayer = {
+        name: "King James",
+        team: "Heat",
+        jerseyNum: 6,
+      };
+      chai
+        .request(server)
+        .put(`/api/players/player/${playerId}`)
+        .send(updatedPlayer)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have.property("name").eq("King James");
+          res.body.should.have.property("team").eq("Heat");
+          res.body.should.have.property("jerseyNum").eq(6);
+          done();
+        });
+    });
+
+    it("If no player ID is selected", (done) => {
+      const playerId = undefined;
+      const updatedPlayer = {
+        name: "King James",
+        team: "Heat",
+        jerseyNum: 6,
+      };
+      chai
+        .request(server)
+        .put(`/api/players/player/${playerId}`)
+        .send(updatedPlayer)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
+
+    it("If player is not in DB", (done) => {
+      const playerId = 12351243512341523;
+      const updatedPlayer = {
+        name: "King James",
+        team: "Heat",
+        jerseyNum: 6,
+      };
+      chai
+        .request(server)
+        .put(`/api/players/player/${playerId}`)
+        .send(updatedPlayer)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
+
+    describe("DELETE endpoint", () => {
+      it("It should return deleted player object", (done) => {
+        const playerId = 3;
+        chai
+          .request(server)
+          .delete(`/api/players/player/${playerId}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a("object");
+            res.body.should.have.property("_id");
+            res.body.should.have.property("testId").eq(3);
+            res.body.should.have.property("name").eq("Giannis Antetokounmpo");
+            res.body.should.have.property("team").eq("Bucks");
+            res.body.should.have.property("jerseyNum").eq(34);
+            done();
+          });
+      });
+
+      it("If there is no player ID", (done) => {
+        const playerId = undefined;
+        chai
+          .request(server)
+          .delete(`/api/players/player/${playerId}`)
+          .end((err, res) => {
+            res.should.have.status(500);
+            done();
+          });
+      });
+
+      it("If the player is not in the DB", (done) => {
+        const playerId = 12353462365;
+        chai
+          .request(server)
+          .delete(`/api/players/player/${playerId}`)
+          .end((err, res) => {
+            res.should.have.status(500);
+            done();
+          });
+      });
     });
   });
 });
