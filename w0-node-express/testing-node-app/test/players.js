@@ -20,6 +20,7 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const { expect } = require("chai");
 const { v4: uuidv4 } = require("uuid");
+const { response } = require("express");
 
 // constants
 const nbaPlayers = [
@@ -79,6 +80,16 @@ describe("REST APIs", () => {
           done();
         });
     });
+
+    it("If the page is not found", (done) => {
+      chai
+        .request(server)
+        .get("/api/player")
+        .end((err, res) => {
+          res.should.have.status(404);
+          done();
+        });
+    });
   });
 
   describe("GET ONE endpoint", () => {
@@ -99,6 +110,27 @@ describe("REST APIs", () => {
           done();
         });
     });
+
+    it("If player object is not specified", (done) => {
+      chai
+        .request(server)
+        .get("/api/players/player/")
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
+
+    it("If player object is not in DB", (done) => {
+      const playerId = 1124132512351235;
+      chai
+        .request(server)
+        .get(`/api/players/player/${playerId}`)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
   });
 
   describe("GET query filter endpoint", () => {
@@ -115,6 +147,16 @@ describe("REST APIs", () => {
           res.should.have.status(200);
           res.body.should.be.a("array");
           res.body.length.should.not.be.eq(0);
+          done();
+        });
+    });
+
+    it("If player query is not specified", (done) => {
+      chai
+        .request(server)
+        .get("/api/players/player?")
+        .end((err, res) => {
+          res.should.have.status(500);
           done();
         });
     });
