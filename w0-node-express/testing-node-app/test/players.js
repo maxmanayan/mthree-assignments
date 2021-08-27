@@ -18,48 +18,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../server");
-const { expect } = require("chai");
 const { v4: uuidv4 } = require("uuid");
-const { response } = require("express");
-
-// constants
-const nbaPlayers = [
-  {
-    _id: uuidv4(),
-    testId: 1,
-    name: "Lebron James",
-    team: "Lakers",
-    jerseyNum: 23,
-  },
-  {
-    _id: uuidv4(),
-    testId: 2,
-    name: "Kevin Durant",
-    team: "Nets",
-    jerseyNum: 7,
-  },
-  {
-    _id: uuidv4(),
-    testId: 3,
-    name: "Giannis Antetokounmpo",
-    team: "Bucks",
-    jerseyNum: 34,
-  },
-  {
-    _id: uuidv4(),
-    testId: 4,
-    name: "Russell Westbrook",
-    team: "Lakers",
-    jerseyNum: 0,
-  },
-  {
-    _id: uuidv4(),
-    testId: 5,
-    name: "Damian Lillard",
-    team: "Trail Blazers",
-    jerseyNum: 0,
-  },
-];
 
 // middleware
 chai.should(); // sets up all test as default should assertions
@@ -163,7 +122,6 @@ describe("REST APIs", () => {
   });
 
   describe("POST endpoint", () => {
-    // positive
     it("Should return an object with all properties", (done) => {
       const player = {
         _id: uuidv4(),
@@ -215,7 +173,7 @@ describe("REST APIs", () => {
     });
 
     it("If no player ID is selected", (done) => {
-      const playerId = null;
+      const playerId = undefined;
       const updatedPlayer = {
         name: "King James",
         team: "Heat",
@@ -246,6 +204,47 @@ describe("REST APIs", () => {
           res.should.have.status(500);
           done();
         });
+    });
+
+    describe("DELETE endpoint", () => {
+      it("It should return deleted player object", (done) => {
+        const playerId = 3;
+        chai
+          .request(server)
+          .delete(`/api/players/player/${playerId}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a("object");
+            res.body.should.have.property("_id");
+            res.body.should.have.property("testId").eq(3);
+            res.body.should.have.property("name").eq("Giannis Antetokounmpo");
+            res.body.should.have.property("team").eq("Bucks");
+            res.body.should.have.property("jerseyNum").eq(34);
+            done();
+          });
+      });
+
+      it("If there is no player ID", (done) => {
+        const playerId = undefined;
+        chai
+          .request(server)
+          .delete(`/api/players/player/${playerId}`)
+          .end((err, res) => {
+            res.should.have.status(500);
+            done();
+          });
+      });
+
+      it("If the player is not in the DB", (done) => {
+        const playerId = 12353462365;
+        chai
+          .request(server)
+          .delete(`/api/players/player/${playerId}`)
+          .end((err, res) => {
+            res.should.have.status(500);
+            done();
+          });
+      });
     });
   });
 });
