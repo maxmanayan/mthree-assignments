@@ -85,54 +85,48 @@ router.get("/players/player", (req, res, next) => {
   let queryTeam = req.query.team;
 
   const playerResArr = [];
+  let error = true;
   nbaPlayers.forEach((p) => {
     if (
       p.jerseyNum === queryJerseyNum ||
       p.name === queryName ||
       p.team === queryTeam
     ) {
+      error = false;
       playerResArr.push(p);
     }
   });
 
   if (playerResArr.length !== 0 && res.status(200)) res.send(playerResArr);
-  if (res.status(400)) {
-    let err = new Error("Player Not Available");
-    err.status = res.status;
-    next(err);
-  }
+  if (error) next(new Error("Player Not Available"));
 });
 
 // Update - PUT
 router.put("/players/player/:testId", (req, res, next) => {
+  let error = true;
   nbaPlayers.forEach((p) => {
     if (p.testId === Number(req.params.testId)) {
       p.name = req.body.name;
       p.team = req.body.team;
       p.jerseyNum = req.body.jerseyNum;
+      error = false;
       res.status(200).send(p);
     }
   });
-  if (res.status(400)) {
-    let err = new Error("Player Not Available");
-    err.status = 400;
-    next(err);
-  }
+  if (error) next(new Error("Player Not Available"));
 });
 
 // Delete - DELETE
 router.delete("/players/player/:testId", (req, res, next) => {
+  let error = true;
   nbaPlayers.map((p, i) => {
     if (p.testId === Number(req.params.testId)) {
       nbaPlayers.splice(i, 1);
+      error = false;
       res.status(200).send(p);
     }
   });
-  if (res.status(400)) {
-    let err = new Error("Player Not Available");
-    err.status = 400;
-    next(err);
-  }
+  if (error) next(new Error("Player Not Available"));
 });
 
 module.exports = router;
