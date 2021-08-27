@@ -161,4 +161,35 @@ describe("REST APIs", () => {
         });
     });
   });
+
+  describe("POST query endpoint", () => {
+    // positive
+    it("Should return an object with all properties", (done) => {
+      const player = {
+        _id: uuidv4(),
+        testId: 1,
+        name: "Lebron James",
+        team: "Lakers",
+        jerseyNum: 23,
+      };
+      chai
+        .request(server)
+        .post("/api/players/player/")
+        .send(player)
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a("object");
+          res.body.should.have.property("_id");
+          res.body.should.have.property("testId");
+          res.body.should.have.property("name");
+          res.body.should.have.property("team");
+          res.body.should.have.property("jerseyNum");
+          res.body.should.have.property("testId").eq(1);
+          done();
+        });
+    });
+
+    // negative
+    // have no validation on api
+  });
 });
