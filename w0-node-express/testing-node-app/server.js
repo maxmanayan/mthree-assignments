@@ -14,7 +14,7 @@ const morgan = require("morgan");
 const playersRouter = require("./routes/players");
 
 // constants
-const PORT = 3000;
+const PORT = 3001;
 
 // APIs and middleware
 app.use(morgan("dev"));
@@ -24,7 +24,7 @@ app.use("/api", playersRouter); // linking players express router APIs
 
 // routes
 app.get("/", (req, res) => {
-  res.status(200).send("<h1>Testing Node.js Application</h1>");
+  console.log("Node server connected");
 });
 
 // error handling
