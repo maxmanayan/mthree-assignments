@@ -162,7 +162,7 @@ describe("REST APIs", () => {
     });
   });
 
-  describe("POST query endpoint", () => {
+  describe("POST endpoint", () => {
     // positive
     it("Should return an object with all properties", (done) => {
       const player = {
@@ -180,16 +180,72 @@ describe("REST APIs", () => {
           res.should.have.status(201);
           res.body.should.be.a("object");
           res.body.should.have.property("_id");
-          res.body.should.have.property("testId");
-          res.body.should.have.property("name");
-          res.body.should.have.property("team");
-          res.body.should.have.property("jerseyNum");
           res.body.should.have.property("testId").eq(1);
+          res.body.should.have.property("name").eq("Lebron James");
+          res.body.should.have.property("team").eq("Lakers");
+          res.body.should.have.property("jerseyNum").eq(23);
           done();
         });
     });
 
     // negative
     // have no validation on api
+  });
+
+  describe("PUT endpoint", () => {
+    it("Should return an object with all properties", (done) => {
+      const playerId = 1;
+      const updatedPlayer = {
+        name: "King James",
+        team: "Heat",
+        jerseyNum: 6,
+      };
+      chai
+        .request(server)
+        .put(`/api/players/player/${playerId}`)
+        .send(updatedPlayer)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have.property("name").eq("King James");
+          res.body.should.have.property("team").eq("Heat");
+          res.body.should.have.property("jerseyNum").eq(6);
+          done();
+        });
+    });
+
+    it("If no player ID is selected", (done) => {
+      const playerId = null;
+      const updatedPlayer = {
+        name: "King James",
+        team: "Heat",
+        jerseyNum: 6,
+      };
+      chai
+        .request(server)
+        .put(`/api/players/player/${playerId}`)
+        .send(updatedPlayer)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
+
+    it("If player is not in DB", (done) => {
+      const playerId = 12351243512341523;
+      const updatedPlayer = {
+        name: "King James",
+        team: "Heat",
+        jerseyNum: 6,
+      };
+      chai
+        .request(server)
+        .put(`/api/players/player/${playerId}`)
+        .send(updatedPlayer)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    });
   });
 });
